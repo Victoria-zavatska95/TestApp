@@ -10,12 +10,13 @@ import UIKit
 import CoreLocation
 import SwiftyJSON
 import Alamofire
+import SwiftyJSON
 class PointsDescriptionTableViewController: UITableViewController, CLLocationManagerDelegate {
 //    let arrayOfPoints = [["latitude": 48.670457300000002, "longitude": 22.294567799999999], ["latitude": 48.609347300000003, "longitude": 22.321566499999999], ["latitude": 48.6146618, "longitude": 22.2937966]]
     
-    var coordLongitudeForDestination: CLLocationDegrees = 0.0
+    var coordLongitudeForDestination: Double = 0.0
     
-    var coordLatitudeForDestination: CLLocationDegrees = 0.0
+    var coordLatitudeForDestination: Double = 0.0
     var distance: String = ""
     
     var arrayOfDistances: [Double] = []
@@ -25,17 +26,19 @@ class PointsDescriptionTableViewController: UITableViewController, CLLocationMan
     //
     let locationManager = CLLocationManager()
     
-    var coordLongitude: CLLocationDegrees = 0.0
-    
-    var coordLatitude: CLLocationDegrees = 0.0
+
     var index: Int = 0
     var indexForDestination: Int = 0
     var minElement: Double = 0.0
     var addressArray: [String] = []
     var currentUser = UserDefaults.standard
-    var arrayForFirstSpot: [String:Double] = [:]
-    var arrayForSpots: [[String:Double]] = [[:]]
-    
+    var arrayForFirstSpot: [String:String] = [:]
+    var arrayForDetailedDescription : [String:String] = [:]
+    var arrayForSpots: [[String:String]] = [[:]]
+    var arrayWithSpots: [String] = []
+    var dictionaryForDetaileddesciption: [[String:String]] = [[:]]
+    var arrayForStringChargersType: [String] = []
+    var string: String = ""
     @IBOutlet weak var SettingsButton: UIBarButtonItem!
     
     
@@ -43,18 +46,38 @@ class PointsDescriptionTableViewController: UITableViewController, CLLocationMan
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.arrayForSpots.remove(at: 0)
+        self.coordLatitudeForDestination = self.currentUser.value(forKey: "userLatitude") as! Double
+        self.coordLongitudeForDestination = self.currentUser.value(forKey: "userLongitude") as! Double
+        print(self.coordLatitudeForDestination)
+        print(self.coordLongitudeForDestination)
+                self.arrayForSpots.remove(at: 0)
         PrivateSpotsRequest().getPrivateSpotList { (response) in
-            print(response["data"].count)
             for i in 0..<response["data"].count {
-                var k = response["data"][i]["location"][1].stringValue
-                print(k)
                 
-                self.arrayForFirstSpot = ["latitude": Double(response["data"][i]["location"][0].stringValue)!, "longitude": Double(response["data"][i]["location"][1].stringValue)!]
+                
+            
+                self.arrayForFirstSpot = ["latitude": response["data"][i]["location"][0].stringValue, "longitude": response["data"][i]["location"][1].stringValue, "address": response["data"][i]["address"].stringValue, "spotId": response["data"][i]["_id"].stringValue, "name": response["data"][i]["name"].stringValue]
+                self.arrayForDetailedDescription = ["addressDetails": response["data"][i]["addressDetail"].stringValue, "duration": response["data"][i]["duration"].stringValue, "description": response["data"][i]["description"].stringValue]
+                if response["data"][i]["chargerTypes"].count != 0 {
+                for i in 0..<response["data"][i]["chargerTypes"].count {
+                    self.arrayForStringChargersType.insert(response["data"][i]["chargerTypes"][i]["name"].stringValue, at: i)
+                    
+                }
+                    print(self.arrayForStringChargersType)
+                    for item in self.arrayForStringChargersType {
+                        self.string += "\(item)"
+                    }
+                    print(self.string)
+                self.arrayForDetailedDescription = ["addressDetails": response["data"][i]["addressDetail"].stringValue, "duration": response["data"][i]["duration"].stringValue, "description": response["data"][i]["description"].stringValue, "chargerTypes": self.string]
+                }else{
+                   self.arrayForDetailedDescription = ["addressDetails": response["data"][i]["addressDetail"].stringValue, "duration": response["data"][i]["duration"].stringValue, "description": response["data"][i]["description"].stringValue, "chargerTypes": ""]
+                }
+         print(self.arrayForDetailedDescription)
+                self.dictionaryForDetaileddesciption.insert(self.arrayForDetailedDescription, at: i)
                 self.arrayForSpots.insert(self.arrayForFirstSpot, at: i)
                 
-                
-            }
+                self.arrayWithSpots.insert(response["data"][i]["_id"].stringValue, at: i)
+            
             print(self.arrayForSpots.count)
             //            var longitudeFirst = response["data"][0]["location"][1].stringValue
             //            for item in response {
@@ -64,39 +87,48 @@ class PointsDescriptionTableViewController: UITableViewController, CLLocationMan
             //            print(longitudeFirst)
         }
         
-        
 
             }
+    }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.tableView.reloadData()
+
         
+//        self.tableView.reloadData()
         
-        GoogleAPIRequest().requestToGoogle(self.coordLatitudeForDestination, self.coordLongitudeForDestination, self.arrayForSpots) { (json, kmArray, distancesArray, addressArray) in
-            self.arrayOfKmInString = kmArray
-            self.arrayOfDistances = distancesArray
-            self.addressArray = addressArray
-            print("self.addressArray\(self.addressArray)")
-            self.tableView.reloadData()
-            print(self.arrayOfDistances.count)
-            if self.arrayOfDistances.count == self.arrayForSpots.count {
-                self.minElement = self.arrayOfDistances.min()!
-                for item in self.arrayOfDistances {
-                    if item == self.minElement {
-                        self.index = self.arrayOfDistances.index(of: item)!
+        GoogleAPIRequest().requestToGoogle(self.coordLatitudeForDestination, self.coordLongitudeForDestination, self.arrayForSpots, self.arrayWithSpots, self.dictionaryForDetaileddesciption) { (json, kmArray, distancesArray, addressArray, deletedArray, status, arrayWithDeletedSpots, dictionaryDeleted) in
+            if status == false {
+                self.arrayWithSpots = arrayWithDeletedSpots
+                self.arrayForSpots = deletedArray
+                self.dictionaryForDetaileddesciption = dictionaryDeleted
+                self.tableView.reloadData()
+            } else {
+                    self.arrayOfKmInString = kmArray
+                self.arrayOfDistances = distancesArray
+                self.addressArray = addressArray
+                print("self.addressArray\(self.addressArray)")
+                self.tableView.reloadData()
+                print(self.arrayOfDistances.count)
+                if self.arrayOfDistances.count == self.arrayForSpots.count {
+                    self.minElement = self.arrayOfDistances.min()!
+                    for item in self.arrayOfDistances {
+                        if item == self.minElement {
+                            self.index = self.arrayOfDistances.index(of: item)!
+                        }
                     }
+                    var oldElementValue = self.arrayOfKmInString[0]
+                    self.arrayOfKmInString[0] = self.arrayOfKmInString[self.index]
+                    self.arrayOfKmInString[self.index] = oldElementValue
+                    
+                    
                 }
-                var oldElementValue = self.arrayOfKmInString[0]
-                self.arrayOfKmInString[0] = self.arrayOfKmInString[self.index]
-                self.arrayOfKmInString[self.index] = oldElementValue
-                
-                
             }
             
         }
+
+        }
         
-    }
-    
+  
     
     @IBAction func buttonSettingsAction(_ sender: Any) {
         self.performSegue(withIdentifier: "toSettingsViewController", sender: self)
@@ -127,11 +159,11 @@ class PointsDescriptionTableViewController: UITableViewController, CLLocationMan
             let cell = tableView.dequeueReusableCell(withIdentifier: "chargingDevice", for: indexPath) as! ChargingTableViewCell
         print(self.arrayOfKmInString.count)
         print(self.arrayForSpots.count)
-         if self.arrayOfKmInString.count == 2  && self.arrayOfKmInString.count == self.arrayForSpots.count {
+         if self.arrayOfKmInString.count == self.arrayForSpots.count {
 
-                    cell.setUp(title: String(indexPath.row), distance: self.arrayOfKmInString[indexPath.row])
+            cell.setUp(title: self.arrayForSpots[indexPath.row]["name"]!, distance: self.arrayOfKmInString[indexPath.row], address: arrayForSpots[indexPath.row]["address"]!)
+            cell.spotID = self.arrayWithSpots[indexPath.row]
         }
-        self.tableView.reloadData()
                 return cell
 
     }
@@ -142,6 +174,9 @@ class PointsDescriptionTableViewController: UITableViewController, CLLocationMan
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.indexForDestination = indexPath.row
+        print(indexPath.row)
+        print(self.indexForDestination)
+        print(self.arrayWithSpots[self.indexForDestination])
         print(self.addressArray[self.indexForDestination])
         if self.addressArray[self.indexForDestination] != nil {
             self.performSegue(withIdentifier: "toDetailedDescriptionViewController", sender: self)
@@ -158,7 +193,12 @@ class PointsDescriptionTableViewController: UITableViewController, CLLocationMan
 //            destination.maximumChargingTime.text =
 //            destination.addressDescription.text =
 //            destination.otherDesciption.text =
-    self.currentUser.set(Double(self.arrayOfDistances[self.indexForDestination]), forKey: "distance")
+            self.currentUser.set(self.arrayForSpots[self.indexForDestination]
+, forKey: "spotSelectedDictionary")
+    destination.spotArray = self.arrayForSpots[self.indexForDestination]
+            destination.spotId = self.arrayWithSpots[self.indexForDestination]
+self.currentUser.set(dictionaryForDetaileddesciption[self.indexForDestination], forKey: "detailedDictionary")
+            destination.arrayWithDetailedDescription = self.dictionaryForDetaileddesciption[self.indexForDestination]
         }
     }
     

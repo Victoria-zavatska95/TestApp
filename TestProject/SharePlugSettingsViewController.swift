@@ -12,63 +12,70 @@ import SwiftyJSON
 class SharePlugSettingsViewController: UIViewController {
 let currentUser = UserDefaults.standard
     
-    @IBOutlet weak var createSpotButton: UIButton!
+
+    
+    let myColor : UIColor = UIColor.white
+    
+    @IBOutlet weak var plugNameTextfield: UITextField!
+
+    @IBOutlet weak var addressNameTextfield: UITextField!
+    
+    @IBOutlet weak var chargersTypeTextfield: UITextField!
+    
+    
+    @IBOutlet weak var maximumChargingTimeTextfield: UITextField!
    
+    @IBOutlet weak var descriptionAddressTextfield: UITextField!
+    
+    @IBOutlet weak var detailsTextfield: UITextField!
+    
+    
+    @IBOutlet weak var savePlugButton: UIButton!
+    
+    var params : [String : String] = [:]
+    
+    @IBOutlet weak var errorLabel: UILabel!
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
+   self.savePlugButton.layer.cornerRadius = 25.0
+        self.savePlugButton.layer.borderWidth = 2.0
+        self.savePlugButton.layer.borderColor = myColor.cgColor
     }
 
+    
+    
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    //    name : String,
-    //    geoCoords : Number,
-    //    userId : ObjectId
-    //    chargerType : [{type: ObjectId, ref: 'ChargerType' }], status : Boolean,
-    //    address : String,
-    //    addressDetails : String,
-    //    description : String,
-    //    duration : Number (Seconds),
-    //    condition : String,
-    //   
-    
-    
-    
-//    let paramsList:[String:String] = [
-    //        "name": spotName,
-    //        "duration": APPRequest().getDataFromLocalTable("availableTime\(plugOwnerId)"),
-    //        "description": APPRequest().getDataFromLocalTable("chargingConditions\(plugOwnerId)"),
-    //        "address": APPRequest().getDataFromLocalTable("sharePlugAddress\(plugOwnerId)"),
-    //        "addressDetail": APPRequest().getDataFromLocalTable("sharePlugAddressDetais\(plugOwnerId)"),
-    //        "location[0]":userLat,
-    //        "location[1]":userLong
-    //    ]
-    
    
-    let params : [String : String] = [
-        "name": "FirstSa",
-                "duration": "50",
-                "description": "descriptionSa",
-                "address": "addressSa",
-                "addressDetail": "addressDetailSa",
-                "location[0]":"48.6092829",
-                "location[1]":"22.3006987"
+    
 
-    ]
-    
-//    self.currentUser.set(userid, forKey: "userid")
-    
-    
-    @IBAction func createSpotAction(_ sender: Any) {
-HelperAlamofires().postCreatePrivateChargerPoint(params: self.params, hostId: currentUser.string(forKey: "userid")!) { (status, responenseJson) in
-    print("111")
+    @IBAction func savePlugAction(_ sender: Any) {
+        if plugNameTextfield.text?.isEmpty == true || addressNameTextfield.text?.isEmpty == true || chargersTypeTextfield.text?.isEmpty == true || maximumChargingTimeTextfield.text?.isEmpty == true || descriptionAddressTextfield.text?.isEmpty == true || detailsTextfield.text?.isEmpty == true {
+            self.errorLabel.text = "All textfields should be fulfilled"
+        }else{
+        PrivateSpotsRequest().postCreatePrivareCharge(spotName: self.plugNameTextfield.text!, chargingTime: self.maximumChargingTimeTextfield.text!, address: self.addressNameTextfield.text!, addressDetail: self.descriptionAddressTextfield.text!, description: self.detailsTextfield.text!) { (response, status, paramsList) in
+            if status == true {
+                self.params = paramsList
+                self.currentUser.set(response, forKey: "spotCreatedByUser")
+                self.errorLabel.text = "Your plug was sucessfully created"
+
+            }
+            }
         }
     }
-        
+    
+    
+    
+    
         
 
     
