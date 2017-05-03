@@ -18,7 +18,7 @@ class Alert: NSObject {
            }
     // end
 
-    // allow notifucation
+    // allow notification
     func AlertToAllowNotifications(text : String, controller: UIViewController){
         let alert = UIAlertController(title: "", message: text, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))

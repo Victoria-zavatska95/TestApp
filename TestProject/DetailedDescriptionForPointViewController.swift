@@ -88,7 +88,25 @@ class DetailedDescriptionForPointViewController: UIViewController {
         self.addressDetailesShow.text = arrayWithDetailedDescription["addressDetails"]
         self.othersShow.text = arrayWithDetailedDescription["description"]
         self.chargersTypeShow.text = arrayWithDetailedDescription["chargerTypes"]
-        self.deleteCharge.isHidden = false
+        if self.titleLabelShow.text == "" {
+            self.titleLabelShow.text = "-- : --"
+        }
+        if self.timeLabelShow.text == "" {
+            self.timeLabelShow.text = "-- : --"
+        }
+        if self.addressLabelShow.text == "" {
+            self.addressLabelShow.text = "-- : --"
+        }
+        if self.addressDetailesShow.text == "" {
+            self.addressDetailesShow.text = "-- : --"
+        }
+        if self.othersShow.text == "" {
+            self.othersShow.text = "-- : --"
+        }
+        if self.chargersTypeShow.text == "" {
+            self.chargersTypeShow.text = "-- : --"
+        }
+                self.deleteCharge.isHidden = false
         if self.currentUser.bool(forKey: "requestWasSent")  {
             self.sendRequestButton.isHidden = true
             self.cancelRequestButton.isHidden = false

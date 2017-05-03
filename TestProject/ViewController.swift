@@ -141,6 +141,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     // end
     
+    // register user not via FB
     @IBAction func registrationAction(_ sender: Any) {
         ValidationChecking().checkingForRegistration(nameTextField.text!, userNameTextField.text!, userNameLabel, emailTextfield.text!, emailLabelSecond, nameLabel, passwordTextfield.text!, passwordLabel) { (name, userName, password, email, parameters) in
             
@@ -166,6 +167,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
+    // end
     
     // set up the view for TapGestureRecognizer
     func forFrameViewTapped() {

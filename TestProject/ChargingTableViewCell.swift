@@ -63,15 +63,8 @@ class ChargingTableViewCell: UITableViewCell {
         self.addressLabel.text = address
         self.sendRequestButton.isHidden = false
         self.cancelRequest.isHidden = true
-        if self.currentUser.value(forKey: "pictureURL") == nil || self.currentUser.object(forKey: "pictureURL") == nil || self.currentUser.string(forKey: "pictureURL") == nil {
-            self.viewForPortrait.image = UIImage(named: "davidbeckham")
-        }else {
-            var pictureString: String = self.currentUser.string(forKey: "pictureURL")!
-            if let imageData: NSData = NSData(contentsOf: URL(string: pictureString)!) {
-                self.viewForPortrait.image = UIImage(data: imageData as Data)
-            }
-        }
-        designSet()
+        self.viewForPortrait.image = UIImage(named: "davidbeckham")
+         designSet()
     }
     // end
     

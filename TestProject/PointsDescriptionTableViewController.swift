@@ -156,8 +156,9 @@ class PointsDescriptionTableViewController: UITableViewController, CLLocationMan
         
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "chargingDevice", for: indexPath) as! ChargingTableViewCell
-        if self.arrayOfKmInString.count == self.arrayForSpots.count {
-            
+        if self.arrayOfKmInString.count != self.arrayForSpots.count {
+        } else {
+        
             cell.setUp(title: self.arrayForSpots[indexPath.row]["name"]!, distance: self.arrayOfKmInString[indexPath.row], address: arrayForSpots[indexPath.row]["address"]!, tableView: self)
             cell.spotID = self.arrayWithSpots[indexPath.row]
             

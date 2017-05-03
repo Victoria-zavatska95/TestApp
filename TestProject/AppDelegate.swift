@@ -59,6 +59,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         var coordLatitude = (manager.location?.coordinate.latitude)!
         GoogleAPIRequest().requestToGoogleInAppDelegate(coordLatitude, coordLongitude) { (json, distance) in
             self.currentUser.set(distance, forKey: "distance")
+            self.currentUser.set(Double(coordLatitude), forKey: "userLatitude")
+        self.currentUser.set(Double(coordLongitude), forKey: "userLongitude")
             self.locationManager.stopUpdatingLocation()
         }
         
@@ -82,20 +84,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         if self.currentUser.value(forKey: "distance") != nil {
             self.distance = self.currentUser.value(forKey: "distance") as! Double
         }
-        if state == .charging && self.currentUser.bool(forKey: "requestWasSent") && distance <= 0.005 {
+        if state == .charging && self.currentUser.bool(forKey: "requestWasSent") && distance <= 0.05 {
             Alert().creatingAlert(message: "Device is charging within 50 m.", controller: UIApplication.topViewController()!)
             self.currentUser.set(false, forKey: "ChargeIsCompleted")
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hideCancel"), object: nil)
         }
         
-        if state == .full && self.currentUser.bool(forKey: "requestWasSent") && distance <= 0.005 {
+        if state == .full && self.currentUser.bool(forKey: "requestWasSent") && distance <= 0.05 {
             Alert().creatingAlert(message: "Device fulled", controller: UIApplication.topViewController()!)
             self.currentUser.set(false, forKey: "ChargeIsCompleted")
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hideCancel"), object: nil)
             
         }
         
-        if state == .unplugged && self.currentUser.bool(forKey: "requestWasSent") && distance <= 0.005 && !self.currentUser.bool(forKey: "ChargeIsCompleted") {
+        if state == .unplugged && self.currentUser.bool(forKey: "requestWasSent") && distance <= 0.05 && !self.currentUser.bool(forKey: "ChargeIsCompleted") {
             
             Alert().creatingAlert(message: "The charging is completed within 50 m.", controller: UIApplication.topViewController()!)
             self.currentUser.set(true, forKey: "ChargeIsCompleted")
@@ -118,8 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         let deviceTokenString = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
         currentUser.set(deviceTokenString, forKey: "DeviceToken")
 
-        
-        // Persist it in your backend in case it's new
+    
     }
     // end
     

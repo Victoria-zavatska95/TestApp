@@ -39,6 +39,7 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+            self.navigationController?.isNavigationBarHidden = true
         if self.currentUser.value(forKey: "pictureURL") == nil || self.currentUser.object(forKey: "pictureURL") == nil || self.currentUser.string(forKey: "pictureURL") == nil {
             self.profilePicture.image = UIImage(named: "davidbeckham")
         } else {
