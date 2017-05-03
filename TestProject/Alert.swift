@@ -10,20 +10,24 @@ import UIKit
 
 class Alert: NSObject {
 
+    // create Alert
     func creatingAlert(message: String, controller : UIViewController) {
         let alert = UIAlertController(title: "Alert", message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         controller.present(alert, animated: true, completion: nil)
-        
-    }
-//
-//    func creatingAlertforTableView(message: String, view : UIView) {
-//        let alert = UIAlertController(title: "Alert", message: message, preferredStyle: UIAlertControllerStyle.alert)
-//        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-//        view.present(alert, animated: true, completion: nil)
-//        
-//    }
+           }
+    // end
 
+    // allow notifucation
+    func AlertToAllowNotifications(text : String, controller: UIViewController){
+        let alert = UIAlertController(title: "", message: text, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (action) in
+ UIApplication.openAppSettings()
+        }))
+        controller.present(alert, animated: true, completion: nil)
+    }
+// end
     
     
     

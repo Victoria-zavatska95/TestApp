@@ -10,4 +10,7 @@ pod 'Alamofire'
 pod 'SwiftyJSON'
 pod 'ReachabilitySwift'
 pod 'JSONWebToken'
+pod 'FacebookCore'
+pod 'FacebookLogin'
+pod 'FacebookShare'
 end

@@ -18,24 +18,22 @@ class PrivateSpotsRequest: NSObject {
     var paramsList:[String: String] = [:]
     var currentUser = UserDefaults.standard
     var userId: String = ""
+    var spotId: String = ""
+    var plugOwnerId: String = ""
+    
     //get private spot list
-    
-    
     func getPrivateSpotList(completitionHandler: @escaping (_ json: JSON) -> ()){
         url = "http://188.166.110.248:"
         port = "3010/v1/private-spots?token=\(token)"
         Alamofire.request("\(url)\(port)", method: .get).responseJSON { (response) in
             let json = JSON(response.data)
-            print(json.debugDescription)
             completitionHandler(json)
         }
     }
-    
     //end
     
-    
-    
-    func postSendRequestForAplug(spotId: String, completitionHandler: @escaping (_ response: JSON, _ status:Bool) -> ()){
+    // post send request
+    func postSendRequestForAplug(spotId: String, completitionHandler: @escaping (_ response: JSON, _ status:Bool, _ statusOfSharing: Bool) -> ()){
         var lat = currentUser.value(forKey: "userLatitude") as! CLLocationDegrees
         self.userLatitude = "\(lat)"
         var long = currentUser.value(forKey: "userLongitude") as! CLLocationDegrees
@@ -44,148 +42,135 @@ class PrivateSpotsRequest: NSObject {
             Alert().creatingAlert(message: "device is not connected to the Internet. Make sure your device is connected to the internet", controller: DetailedDescriptionForPointViewController())
         }
         if connection?.isReachable == true {
-            print(currentUser.value(forKey: "userId"))
             self.userId = currentUser.value(forKey: "userId")! as! String
-            print(self.userId)
             self.url = "http://188.166.110.248:"
             self.port = "3010/v1/users/\(self.userId)/private-history?token=\(self.token)"
-            print(self.token)
-            print(self.userLatitude)
-            print(spotId)
-            print(self.userLongitude)
             self.paramsList = [
                 "spot": spotId,
                 "location[0]": self.userLatitude,
                 "location[1]": self.userLongitude
             ]
-            print(self.paramsList)
-            //        print("111111\(self.dictionaryOfSpot["spotId"]!)")
-            print("\(self.url)\(self.port)")
-            print("\(self.url)\(self.port)")
             Alamofire.request("\(self.url)\(self.port)", method: .post, parameters: self.paramsList).responseJSON { (response) in
                 var json:JSON = JSON(response.data)
-                if json["code"].stringValue == "400" {
-                    print(json.debugDescription)
-                    print(json["code"].stringValue)
-                    completitionHandler(json, false)
+                if json["code"].stringValue == "400" && json["error"].stringValue != "You can't host yourself" {
+                    completitionHandler(json, false, false)
                 }
-                  if json["code"].stringValue == "200" {
-                    print(json["code"].stringValue)
-                    print(json.debugDescription)
+                if json["code"].stringValue == "200" {
                     self.currentUser.set(json["data"]["host"]["_id"].stringValue, forKey: "hostID")
                     self.currentUser.set(json["data"]["user"]["_id"].stringValue, forKey: "userID")
                     self.currentUser.set(json["data"]["_id"].stringValue, forKey: "historyID")
                     self.currentUser.set(true, forKey: "requestWasSent")
                     self.currentUser.set(json["data"]["spot"]["location"][0].stringValue, forKey: "requestForPlugJSONLatitude")
                     self.currentUser.set(json["data"]["spot"]["location"][1].stringValue, forKey: "requestForPlugJSONLongitude")
-                    completitionHandler(json, true)
-  
-                } else {
-                    print(json.debugDescription)
-                    completitionHandler(json, false)
+                    completitionHandler(json, true, false)
+                }
+                if json["error"].stringValue == "You can't host yourself"{
+                    completitionHandler(json, false, true)
                 }
             }
             
             
             
-            }
-    }
-
-
-    
-    
-    
-    
-    //                    let username = json["data"]["host"]["firstName"].stringValue
-    //                    APPPush().cleareScheduleNotificationByType("waitingTime")
-    //                    APPPush().setUpScheduledLocalNotification("PlugSpot", alertBody: "\(username) doesn’t seem to respond. Would you like to search a different spot?", timeInterval: 300, type: "waitingTime")
-    //                    APPCharging().savePendingRequestPRIVATE(json["data"])
-    //
-    //                    APPPush().sendPushAboutPendingConfirmedRequest(plugOwnerId, json: json["data"], message: APPPushMessages().getChargeRequestMessageUSER(APPUser().getUserDataById(userId)["firstName"].stringValue), viewController: "RequestorDetailsTableViewController")
-    //            APPPush().sendPushToUser(plugOwnerId, message: APPPushMessages().getChargeRequestMessageUSER(APPUser().getUserDataById(userId)["firstName"].stringValue), options: "", type: "pendingRequest", requestId: json["data"]["_id"].stringValue )
-    
-    
-    
-    
-    // send request for a private spot
-    
-    
-    func postCreatePrivareCharge(spotName:String, chargingTime: String, address:String, addressDetail: String, description: String, completionHandler:@escaping (_ response: JSON, _ status: Bool, _ paramsList: [String:String]) -> ()){
-        var userLatitudeAnother = currentUser.value(forKey: "userLatitude") as! CLLocationDegrees
-        var userLongitudeAnother = currentUser.value(forKey: "userLongitude") as! CLLocationDegrees
-        print(userLatitudeAnother)
-        let plugOwnerId:String = currentUser.value(forKey: "userId")! as! String
-        port = "3010/v1/users/\(plugOwnerId)/spots?token=\(self.token)"
-        paramsList = [
-            "name": spotName,
-            "duration": chargingTime,
-            "description": description,
-            "address": address,
-            "addressDetail": addressDetail,
-            "location[0]": "\(userLatitudeAnother)",
-            "location[1]": "\(userLongitudeAnother)"
-        ]
-        Alamofire.request("\(url)\(port)", method: .post, parameters: paramsList).responseJSON { (response) in
-            let json: JSON = JSON(response.data)
-            print(json.debugDescription)
-            print(json.debugDescription)
-            completionHandler(json, true, self.paramsList)
         }
     }
+    // end
     
     
+    func postCreatePrivareCharge(parameters: [String:String], completionHandler:@escaping (_ response: JSON, _ status: Bool, _ paramsList: [String:String], _ error: String) -> ()){
+        
+        let plugOwnerId:String = currentUser.value(forKey: "userId")! as! String
+        port = "3010/v1/users/\(plugOwnerId)/spots?token=\(self.token)"
+        var error: String = ""
+        Alamofire.request("\(url)\(port)", method: .post, parameters: parameters).responseJSON { (response) in
+            let json: JSON = JSON(response.data)
+            if json["code"].stringValue == "201" {
+                
+                self.currentUser.set(json["data"]["owner"]["_id"].stringValue, forKey: "spotOwnerId")
+                self.currentUser.set(json["data"]["_id"].stringValue, forKey: "plugIdSetWhenCreated")
+                self.currentUser.set(true, forKey: "spotCreated")
+                self.currentUser.set(json["data"]["name"].stringValue, forKey: "plugNameForProfile")
+                self.currentUser.set(json["data"]["duration"].stringValue, forKey: "maximumTimeProfile")
+                self.currentUser.set(json["data"]["address"].stringValue, forKey: "plugAddress")
+                
+                completionHandler(json, true, self.paramsList, error)
+            }
+            else if json["error"].stringValue == "User can be owner only one spot" {
+                error = "You can be owner of only one spot"
+                completionHandler(json, false, [:], error)
+            }
+           else if json["error"].stringValue == "This location already reserved" {
+                error = "This location already reserved"
+                completionHandler(json, false, [:], error)
+            } else {
+                error = "You did not create the spot"
+                completionHandler(json, false, [:], error)
+            }
+            
+        }
+    }
+    // end
     
-    
-    
-    
-    /*
-     User declined the request before confimation [user]
-     */
+    // cancel request
     func putCanceledPrivateHostRequestBeforeConfirmation(completitionHandler:@escaping (_ response:JSON, _ status:Bool) -> ()){
         var userIdNotString = self.currentUser.value(forKey: "userID")
         userId = "\(userIdNotString!)"
-//        var hostIdAny = self.currentUser.value(forKey: "hostID")
-//        var hostId: String = "\(hostIdAny!)"
-       var id = self.currentUser.value(forKey: "historyID")
+        var id = self.currentUser.value(forKey: "historyID")
         var historyId: String = "\(id!)"
-//        print("hostId\(hostId)")
-        print("userID\(userId)")
-        print("historyId\(historyId)")
         port = "3010/v1/users/\(self.userId)/private-history/\(historyId)/canceled-before-confirmation?token=\(self.token)"
-        print("\(self.url)\(self.port)")
         Alamofire.request("\(self.url)\(self.port)", method: .put, parameters: nil).responseJSON { (response) in
             let json:JSON = JSON(response.data)
-            
-            print(json)
-            if let err = response.error {
-                print("error \(err)")
+            if json["code"].stringValue == "400" {
                 completitionHandler(json, false)
-            }else{
-                //                APPPush().cleareScheduleNotificationByType("waitingTime")
-                //
-                //                APPPush().sendPushToUser(hostId, message: APPPushMessages().getCancleMessageUSER(APPUser().getUserDataById(userId)["firstName"].stringValue), options: "")
-                //                APPRequest().getPrivateUserChargingRequestsHistoryForListView { (response) -> () in
-                //
-                //                }
-                //                completitionHandler(response:"ok", status: true, history: json["data"])
-                //            }
-                //            operationQueue.addOperation(opt)
-                //        } catch {
-                //            completitionHandler(response:"nope", status: false, history: nil)
-                //        }
-                completitionHandler(json, true)
             }
-            //end
+            if json["code"].stringValue == "200" {
+                
+                self.currentUser.set(false, forKey: "requestWasSent")
+                
+                completitionHandler(json, true)
+            }else{
+                completitionHandler(json, false)
+                
+            }
             
             
         }
-    
+        
     }
+    //end
     
-    
-
-    
-    
-    
+    //remove private Spot
+    func deletePrivareCharge(completitionHandler:@escaping (_ response: JSON, _ status:Bool, _ error: String) -> ()){
+        var error: String = ""
+        if self.currentUser.bool(forKey: "spotCreated") {
+            var spotIdNotString = self.currentUser.value(forKey: "plugIdSetWhenCreated") as! String
+            self.spotId = "\(spotIdNotString)"
+            var plugOwnerId:String = self.currentUser.value(forKey: "userId")! as! String
+            self.port = "3010/v1/users/\(plugOwnerId)/spots/\(self.spotId)/?token=\(self.token)"
+            Alamofire.request("\(self.url)\(self.port)", method: .delete, parameters: nil).responseJSON { (response) in
+                let json:JSON = JSON(response.data)
+                if json["code"].stringValue == "400" {
+                    error = "Deleting a charge was failed"
+                    completitionHandler(json, false, error)
+                }
+                if json["code"].stringValue == "200" {
+                    self.currentUser.set(false, forKey: "spotCreated")
+                    completitionHandler(json, true, "")
+                }
+                if json["code"].stringValue == "401" {
+                    error = "You are not owner of this spot"
+                    completitionHandler(json, false, error)
+                    
+                }
+                
+                
+            }
+        } else {
+            error = "You cannot delete the spot because you are not owner of this spot"
+            completitionHandler([], false, error)
+            
+        }
+        
+    }
+    //end}
     
 }
