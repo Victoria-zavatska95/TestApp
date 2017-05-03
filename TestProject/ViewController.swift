@@ -83,7 +83,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     // end
     
-    
+    //log in user
     @objc func loginButtonClicked() {
         let loginManagerJustConstant = LoginManager()
         loginManagerJustConstant.logIn([.publicProfile, .email], viewController: self) { (loginResult) in
@@ -129,7 +129,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
-    
+    // end
     
     
     // hide labels while editing textfields
