@@ -30,13 +30,14 @@ class GoogleAPIRequest: NSObject {
             
             var anotherCoordinate : String = "\(coordinate₀.latitude),\(coordinate₀.longitude)"
             var meCoordinate: String = "\(coordinate₁.latitude),\(coordinate₁.longitude)"
+            deletedArray = arrayWithPointsFromServer
+            dictionaryWithDetailedSpots = dictionaryWithSpotsInitial
+            arrayForSpotsFinal = arrayWithSpotsInitial
             
             Alamofire.request("https://maps.googleapis.com/maps/api/directions/json?origin=\(meCoordinate)&destination=\(anotherCoordinate)&sensor=true&mode=walking&language=en&key=AIzaSyCorsqzOPXyDassV5BAFNujLqEGYO6o0ng", method: .get).responseJSON { (response) in
                 let rezul = JSON(response.data)
                 if rezul["status"].stringValue == "ZERO_RESULTS" {
-                    deletedArray = arrayWithPointsFromServer
-                    dictionaryWithDetailedSpots = dictionaryWithSpotsInitial
-                    arrayForSpotsFinal = arrayWithSpotsInitial
+                    
                     for (index, dict) in arrayWithPointsFromServer.enumerated() {
                         if dict == item {
                             deletedArray.remove(at: index)

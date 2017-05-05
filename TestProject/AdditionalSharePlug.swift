@@ -30,18 +30,18 @@ class AdditionalSharePlug: NSObject {
         }
     }
     
-        func sharePlugChecking(_ plugName: String, _ addressName: String, _ chargersType: String, _ maximumChargingTimeTextfield: String, _ descriptionAddressTextfield: String, _ detailsTextfield: String)-> [String : String] {
+        func sharePlugChecking(_ plugName: String, _ addressName: String, _ maximumChargingTimeTextfield: String, _ descriptionAddressTextfield: String, _ detailsTextfield: String)-> [String : String] {
         var stringTime: String = maximumChargingTimeTextfield
         var timeOptional: Int? = Int(stringTime)
         var userLatitudeAnother = currentUser.value(forKey: "userLatitude") as! CLLocationDegrees
         var userLongitudeAnother = currentUser.value(forKey: "userLongitude") as! CLLocationDegrees
-        if plugName == "" || addressName == "" || chargersType == "" || maximumChargingTimeTextfield == "" || descriptionAddressTextfield == "" || detailsTextfield == "" {
+        if plugName == "" || addressName == "" || maximumChargingTimeTextfield == "" || descriptionAddressTextfield == "" || detailsTextfield == "" {
             Alert().creatingAlert(message: "All textfields should be fulfilled", controller: UIApplication.topViewController()!)
         }
         else if timeOptional == nil {
             Alert().creatingAlert(message: "You should enter only numbers in the maximum charging time textfield", controller: UIApplication.topViewController()!)
         }
-        if plugName != "" && addressName != "" && chargersType != "" && maximumChargingTimeTextfield != "" && descriptionAddressTextfield != "" && detailsTextfield != "" && timeOptional != nil {
+        if plugName != "" && addressName != "" && maximumChargingTimeTextfield != "" && descriptionAddressTextfield != "" && detailsTextfield != "" && timeOptional != nil {
             self.parameters = [
                 "name": plugName,
                 "duration": maximumChargingTimeTextfield,

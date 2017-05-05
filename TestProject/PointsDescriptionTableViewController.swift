@@ -59,18 +59,9 @@ class PointsDescriptionTableViewController: UITableViewController, CLLocationMan
                 for i in 0..<response["data"].count {
                     self.arrayForFirstSpot = ["latitude": response["data"][i]["location"][0].stringValue, "longitude": response["data"][i]["location"][1].stringValue, "address": response["data"][i]["address"].stringValue, "spotId": response["data"][i]["_id"].stringValue, "name": response["data"][i]["name"].stringValue]
                     self.arrayForDetailedDescription = ["addressDetails": response["data"][i]["addressDetail"].stringValue, "duration": response["data"][i]["duration"].stringValue, "description": response["data"][i]["description"].stringValue]
-                    if response["data"][i]["chargerTypes"].count > 0 {
-                        for i in 0..<response["data"][i]["chargerTypes"].count {
-                            self.arrayForStringChargersType.insert(response["data"][i]["chargerTypes"][i]["name"].stringValue, at: i)
-                            
-                        }
-                        for item in self.arrayForStringChargersType {
-                            self.arrayForStringChargersTypeStringOfAllElements += "\(item)"
-                        }
-                        self.arrayForDetailedDescription = ["addressDetails": response["data"][i]["addressDetail"].stringValue, "duration": response["data"][i]["duration"].stringValue, "description": response["data"][i]["description"].stringValue, "chargerTypes": self.arrayForStringChargersTypeStringOfAllElements]
-                    }else{
-                        self.arrayForDetailedDescription = ["addressDetails": response["data"][i]["addressDetail"].stringValue, "duration": response["data"][i]["duration"].stringValue, "description": response["data"][i]["description"].stringValue, "chargerTypes": ""]
-                    }
+                    
+                        self.arrayForDetailedDescription = ["addressDetails": response["data"][i]["addressDetail"].stringValue, "duration": response["data"][i]["duration"].stringValue, "description": response["data"][i]["description"].stringValue]
+
                     if response["data"][i]["owner"] != nil && response["data"][i]["name"].stringValue != "FirstSa" {
                         self.dictionaryForDetaileddesciption.append(self.arrayForDetailedDescription)
                         self.arrayForSpots.append(self.arrayForFirstSpot)
@@ -168,12 +159,12 @@ class PointsDescriptionTableViewController: UITableViewController, CLLocationMan
                 
             }
  
-            if self.currentUser.bool(forKey: "requestWasSent") && cell.identifier != self.arrayWithSpots[indexPath.row] && self.identifier == "no" && !self.currentUser.bool(forKey: "spotCreated") {
+             if self.currentUser.bool(forKey: "requestWasSent") && cell.identifier != self.arrayWithSpots[indexPath.row] && self.identifier == "no" && !self.currentUser.bool(forKey: "spotCreated"){
                 cell.sendRequestButton.isHidden = true
                 cell.cancelRequest.isHidden = true
             }
             
-            if self.currentUser.bool(forKey: "requestWasSent") && self.currentUser.value(forKey: "spotIDWhereRequestWasSent") as! String != nil && self.currentUser.value(forKey: "spotIDWhereRequestWasSent") as! String == self.arrayWithSpots[indexPath.row] && self.identifier == "no" && !self.currentUser.bool(forKey: "spotCreated") {
+             if self.currentUser.bool(forKey: "requestWasSent") && self.currentUser.value(forKey: "spotIDWhereRequestWasSent") as! String != nil && self.currentUser.value(forKey: "spotIDWhereRequestWasSent") as! String == self.arrayWithSpots[indexPath.row] && self.identifier == "no" && !self.currentUser.bool(forKey: "spotCreated") {
                 
                 cell.sendRequestButton.isHidden = true
                 
@@ -182,18 +173,18 @@ class PointsDescriptionTableViewController: UITableViewController, CLLocationMan
                 
             }
             
-            if !self.currentUser.bool(forKey: "requestWasSent") && cell.identifier == self.arrayWithSpots[indexPath.row] && self.identifier == "no" && !self.currentUser.bool(forKey: "spotCreated") {
+             if !self.currentUser.bool(forKey: "requestWasSent") && cell.identifier == self.arrayWithSpots[indexPath.row] && self.identifier == "no" && !self.currentUser.bool(forKey: "spotCreated") {
                 cell.sendRequestButton.isHidden = false
                 cell.cancelRequest.isHidden = true
                 cell.identifier = ""
                 
             }
-            if !self.currentUser.bool(forKey: "requestWasSent") && cell.identifier != self.arrayWithSpots[indexPath.row] && self.identifier == "no" && !self.currentUser.bool(forKey: "spotCreated") {
+             if !self.currentUser.bool(forKey: "requestWasSent") && cell.identifier != self.arrayWithSpots[indexPath.row] && self.identifier == "no" && !self.currentUser.bool(forKey: "spotCreated") {
                 cell.cancelRequest.isHidden = true
                 cell.sendRequestButton.isHidden = false
                 
             }
-            if self.currentUser.bool(forKey: "requestWasSent") && self.identifier == "Success" && self.arrayWithSpots[indexPath.row] == self.currentUser.value(forKey: "spotIDWhereRequestWasSent") as! String! && !self.currentUser.bool(forKey: "spotCreated") {
+           if self.currentUser.bool(forKey: "requestWasSent") && self.identifier == "Success" && self.arrayWithSpots[indexPath.row] == self.currentUser.value(forKey: "spotIDWhereRequestWasSent") as! String! && !self.currentUser.bool(forKey: "spotCreated") {
                 cell.cancelRequest.isHidden = false
                 cell.sendRequestButton.isHidden = true
                 self.identifier = "no"
@@ -217,11 +208,7 @@ class PointsDescriptionTableViewController: UITableViewController, CLLocationMan
     // select a row
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.indexForDestination = indexPath.row
-        if self.addressArray[self.indexForDestination] != nil {
-            
-            self.currentUser.set(self.arrayWithSpots[self.indexForDestination], forKey: "privateSpotIdSelected")
             self.performSegue(withIdentifier: "toDetailedDescriptionViewController", sender: self)
-        }
     }
     // end
     
@@ -232,14 +219,8 @@ class PointsDescriptionTableViewController: UITableViewController, CLLocationMan
             
             let destination = segue.destination as! DetailedDescriptionForPointViewController
             destination.reloadingTableView(tableView: self)
-            //            destination.titleLabel.text =
-            destination.adress = self.addressArray[self.indexForDestination]
-            self.currentUser.set(self.arrayForSpots[self.indexForDestination]
-                , forKey: "spotSelectedDictionary")
             destination.spotArray = self.arrayForSpots[self.indexForDestination]
             destination.spotId = self.arrayWithSpots[self.indexForDestination]
-            
-            self.currentUser.set(dictionaryForDetaileddesciption[self.indexForDestination], forKey: "detailedDictionary")
             destination.arrayWithDetailedDescription = self.dictionaryForDetaileddesciption[self.indexForDestination]
         }
     }

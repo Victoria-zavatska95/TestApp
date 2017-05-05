@@ -18,8 +18,6 @@ class DetailedDescriptionForPointViewController: UIViewController {
     
     @IBOutlet weak var addressLabel: UILabel!
     
-    @IBOutlet weak var typeOfChargers: UILabel!
-    
     @IBOutlet weak var maximumChargingTime: UILabel!
     
     @IBOutlet weak var addressDescription: UILabel!
@@ -43,7 +41,6 @@ class DetailedDescriptionForPointViewController: UIViewController {
     
     
     var spotId: String = ""
-    var adress: String = ""
     var spotArray: [String:String] = [:]
     var arrayWithDetailedDescription: [String:String] = [:]
     var identifierOfRequestSentFromDetailedView: String = ""
@@ -87,7 +84,7 @@ class DetailedDescriptionForPointViewController: UIViewController {
         self.addressLabelShow.text = spotArray["address"]
         self.addressDetailesShow.text = arrayWithDetailedDescription["addressDetails"]
         self.othersShow.text = arrayWithDetailedDescription["description"]
-        self.chargersTypeShow.text = arrayWithDetailedDescription["chargerTypes"]
+      
         if self.titleLabelShow.text == "" {
             self.titleLabelShow.text = "-- : --"
         }
@@ -103,9 +100,7 @@ class DetailedDescriptionForPointViewController: UIViewController {
         if self.othersShow.text == "" {
             self.othersShow.text = "-- : --"
         }
-        if self.chargersTypeShow.text == "" {
-            self.chargersTypeShow.text = "-- : --"
-        }
+    
                 self.deleteCharge.isHidden = false
         if self.currentUser.bool(forKey: "requestWasSent")  {
             self.sendRequestButton.isHidden = true

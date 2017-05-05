@@ -122,6 +122,7 @@ class RequestForAuthorizationViewController: UIViewController, CLLocationManager
         }
         if self.currentUser.object(forKey: "userLatitude") == nil && self.currentUser.object(forKey: "userLongitude") == nil {
   Alert().AlertToAllowNotifications(text: "To share a plug, you should allow geolocation usage by the application", controller: self)
+            
         }
         if self.currentUser.bool(forKey: "spotCreated") {
             self.spotownerId = "\(self.currentUser.value(forKey: "spotOwnerId")!)"
@@ -129,7 +130,7 @@ class RequestForAuthorizationViewController: UIViewController, CLLocationManager
                 self.shareButton.isEnabled = false
                 self.deleteButton.isHidden = false
                 Alert().creatingAlert(message: "You cannot share the plug because you have already created one. If you wish to create another plug, please delete the previous one", controller: self)
-            }
+                           }
             
         } else {
             self.performSegue(withIdentifier: "toSharePlugViewController", sender: self)

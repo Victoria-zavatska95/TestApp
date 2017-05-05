@@ -22,8 +22,6 @@ let currentUser = UserDefaults.standard
 
     @IBOutlet weak var addressNameTextfield: UITextField!
     
-    @IBOutlet weak var chargersTypeTextfield: UITextField!
-    
     
     @IBOutlet weak var maximumChargingTimeTextfield: UITextField!
    
@@ -97,8 +95,7 @@ var userCoordinate2D = CLLocationCoordinate2D()
     @IBAction func clearAction(_ sender: Any) {
         plugNameTextfield.text = ""
         addressNameTextfield.text = ""
-        chargersTypeTextfield.text = ""
-        maximumChargingTimeTextfield.text = ""
+              maximumChargingTimeTextfield.text = ""
         descriptionAddressTextfield.text = ""
         detailsTextfield.text = ""
         
@@ -114,7 +111,7 @@ var userCoordinate2D = CLLocationCoordinate2D()
     
     // to save plug
     @IBAction func savePlugAction(_ sender: Any) {
-        self.params = AdditionalSharePlug().sharePlugChecking(self.plugNameTextfield.text!, addressNameTextfield.text!, chargersTypeTextfield.text!, self.maximumChargingTimeTextfield.text!, descriptionAddressTextfield.text!, detailsTextfield.text!)
+        self.params = AdditionalSharePlug().sharePlugChecking(self.plugNameTextfield.text!, addressNameTextfield.text!,  self.maximumChargingTimeTextfield.text!, descriptionAddressTextfield.text!, detailsTextfield.text!)
                  if self.reachability.isReachable {
         PrivateSpotsRequest().postCreatePrivareCharge(parameters: self.params) { (response, status, paramsList, error) in
             if status {
