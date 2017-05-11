@@ -51,7 +51,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
         super.viewDidLoad()
         
-        var tapGesture = UITapGestureRecognizer(target: self, action: "forFrameViewTapped")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(ViewController.forFrameViewTapped))
         
         self.myLoginButton.addTarget(self, action: #selector(self.loginButtonClicked), for: .touchUpInside)
         self.viewForFrame.addGestureRecognizer(tapGesture)

@@ -105,7 +105,7 @@
                                         </constraints>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="next" secureTextEntry="YES"/>
                                     </textField>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EmM-Y5-YC3">
                                         <rect key="frame" x="10" y="268" width="355" height="1"/>
@@ -123,7 +123,7 @@
                                         </constraints>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="next"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="x7A-xa-0jq">
                                         <rect key="frame" x="167" y="146" width="198" height="40"/>
@@ -149,7 +149,7 @@
                                         </constraints>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="next"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="7NI-Gx-nXk">
                                         <rect key="frame" x="167" y="128" width="198" height="40"/>
@@ -175,7 +175,7 @@
                                         </constraints>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="next"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="Kan-RO-06K">
                                         <rect key="frame" x="167" y="187" width="198" height="40"/>
@@ -445,10 +445,10 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhd-v0-F6y">
-                                                <rect key="frame" x="10" y="622" width="355" height="35"/>
+                                                <rect key="frame" x="10" y="627" width="355" height="30"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="35" id="eEM-HC-qKZ"/>
+                                                    <constraint firstAttribute="height" constant="30" id="eEM-HC-qKZ"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                                 <state key="normal" title="LOG IN">
@@ -459,7 +459,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ifP-oJ-ccQ">
-                                                <rect key="frame" x="10" y="582" width="355" height="30"/>
+                                                <rect key="frame" x="10" y="587" width="355" height="30"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="PiO-9P-xNa"/>
@@ -472,13 +472,14 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="Mhd-v0-F6y" secondAttribute="bottom" constant="10" id="1x8-Gx-GG9"/>
                                             <constraint firstItem="zX1-R3-OdV" firstAttribute="top" secondItem="Xhf-N5-eeK" secondAttribute="top" constant="88" id="34B-Jd-L03"/>
                                             <constraint firstAttribute="trailing" secondItem="ifP-oJ-ccQ" secondAttribute="trailing" constant="10" id="4Rw-f0-2CC"/>
                                             <constraint firstItem="eEz-Pt-XY5" firstAttribute="leading" secondItem="3wx-7g-k9p" secondAttribute="trailing" constant="40" id="4vc-78-EDb"/>
                                             <constraint firstItem="zX1-R3-OdV" firstAttribute="leading" secondItem="Xhf-N5-eeK" secondAttribute="leading" constant="10" id="6RV-jE-Sqn"/>
                                             <constraint firstAttribute="trailing" secondItem="eEz-Pt-XY5" secondAttribute="trailing" constant="10" id="9Ev-iN-fy5"/>
+                                            <constraint firstItem="Mhd-v0-F6y" firstAttribute="top" secondItem="ifP-oJ-ccQ" secondAttribute="bottom" constant="10" id="BMu-s1-gkH"/>
                                             <constraint firstItem="3wx-7g-k9p" firstAttribute="top" secondItem="Nrd-jc-CFd" secondAttribute="bottom" id="BfZ-p5-YiT"/>
-                                            <constraint firstItem="Mhd-v0-F6y" firstAttribute="top" secondItem="ifP-oJ-ccQ" secondAttribute="bottom" constant="10" id="CTa-68-sy5"/>
                                             <constraint firstItem="W0z-WC-2hO" firstAttribute="leading" secondItem="Xhf-N5-eeK" secondAttribute="leading" constant="10" id="Cu3-fY-G7L"/>
                                             <constraint firstItem="Nrd-jc-CFd" firstAttribute="top" secondItem="p4F-pg-yQu" secondAttribute="bottom" id="FV2-om-Fqb"/>
                                             <constraint firstAttribute="trailing" secondItem="zX1-R3-OdV" secondAttribute="trailing" constant="10" id="IIy-yf-6ka"/>
@@ -494,7 +495,6 @@
                                             <constraint firstAttribute="trailing" secondItem="Ncf-Bk-Yl8" secondAttribute="trailing" constant="10" id="lQr-KH-zbs"/>
                                             <constraint firstItem="ifP-oJ-ccQ" firstAttribute="leading" secondItem="Xhf-N5-eeK" secondAttribute="leading" constant="10" id="mqL-zq-9Bs"/>
                                             <constraint firstItem="3wx-7g-k9p" firstAttribute="leading" secondItem="Xhf-N5-eeK" secondAttribute="leading" constant="10" id="pRt-hI-zAY"/>
-                                            <constraint firstAttribute="bottom" secondItem="Mhd-v0-F6y" secondAttribute="bottom" constant="10" id="rvD-kK-Gbc"/>
                                             <constraint firstItem="W0z-WC-2hO" firstAttribute="top" secondItem="3wx-7g-k9p" secondAttribute="bottom" id="u4S-tt-Z8p"/>
                                             <constraint firstItem="p4F-pg-yQu" firstAttribute="leading" secondItem="Xhf-N5-eeK" secondAttribute="leading" constant="10" id="yCS-ex-n9R"/>
                                         </constraints>
@@ -1209,7 +1209,7 @@
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation" returnKeyType="next"/>
                             </textField>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cIO-qB-WEG">
                                 <rect key="frame" x="20" y="256" width="335" height="1"/>
@@ -2112,9 +2112,9 @@
         <segue reference="ukV-qd-3Qf"/>
         <segue reference="oCz-hR-7ah"/>
         <segue reference="5Eh-Xf-Fdn"/>
-        <segue reference="c24-rb-X3U"/>
-        <segue reference="4sQ-E2-sRc"/>
         <segue reference="8Is-Ry-1Ku"/>
-        <segue reference="TXZ-GN-c8R"/>
+        <segue reference="4sQ-E2-sRc"/>
+        <segue reference="Bza-kE-FZc"/>
+        <segue reference="s1i-1j-0S0"/>
     </inferredMetricsTieBreakers>
 </document>

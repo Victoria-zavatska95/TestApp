@@ -50,7 +50,7 @@ class LoginizationViewController: UIViewController, CLLocationManagerDelegate, U
         super.viewDidLoad()
         self.navigationController?.isNavigationBarHidden = true
         self.errorLabel.isHidden = true
-        var tapGesture = UITapGestureRecognizer(target: self, action: "forFrameViewTapped")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(LoginizationViewController.forFrameViewTapped))
         self.viewForFrame.addGestureRecognizer(tapGesture)
         
         passwordConfirmTextField.delegate = self
@@ -82,6 +82,8 @@ class LoginizationViewController: UIViewController, CLLocationManagerDelegate, U
     
     override func viewDidAppear(_ animated: Bool) {
         self.navigationController?.isNavigationBarHidden = true
+        self.loginizationButton.layer.cornerRadius = 7.5
+        self.myLoginButton.layer.cornerRadius = 7.5
         
     }
     

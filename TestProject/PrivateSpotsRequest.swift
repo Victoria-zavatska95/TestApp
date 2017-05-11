@@ -112,7 +112,7 @@ class PrivateSpotsRequest: NSObject {
     
     // cancel request
     func putCanceledPrivateHostRequestBeforeConfirmation(completitionHandler:@escaping (_ response:JSON, _ status:Bool) -> ()){
-        var userIdNotString = self.currentUser.value(forKey: "userID")
+        let userIdNotString = self.currentUser.value(forKey: "userID")
         userId = "\(userIdNotString!)"
         var id = self.currentUser.value(forKey: "historyID")
         var historyId: String = "\(id!)"

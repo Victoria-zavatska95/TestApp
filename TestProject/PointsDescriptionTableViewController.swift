@@ -161,14 +161,17 @@ class PointsDescriptionTableViewController: UITableViewController, CLLocationMan
  
              if self.currentUser.bool(forKey: "requestWasSent") && cell.identifier != self.arrayWithSpots[indexPath.row] && self.identifier == "no" && !self.currentUser.bool(forKey: "spotCreated"){
                 cell.sendRequestButton.isHidden = true
+                cell.sendRequestButton.isEnabled = false
                 cell.cancelRequest.isHidden = true
+                cell.cancelRequest.isEnabled = false
             }
             
              if self.currentUser.bool(forKey: "requestWasSent") && self.currentUser.value(forKey: "spotIDWhereRequestWasSent") as! String != nil && self.currentUser.value(forKey: "spotIDWhereRequestWasSent") as! String == self.arrayWithSpots[indexPath.row] && self.identifier == "no" && !self.currentUser.bool(forKey: "spotCreated") {
                 
                 cell.sendRequestButton.isHidden = true
-                
+                cell.sendRequestButton.isEnabled = false
                 cell.cancelRequest.isHidden = false
+                cell.cancelRequest.isEnabled = true
                 
                 
             }

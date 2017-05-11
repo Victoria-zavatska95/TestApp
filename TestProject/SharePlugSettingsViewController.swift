@@ -53,7 +53,7 @@ var userCoordinate2D = CLLocationCoordinate2D()
   self.clearButton.layer.borderColor = myColor.cgColor
         self.clearButton.layer.cornerRadius = 7.5
         self.clearButton.layer.borderWidth = 1.0
-        var tapGesture = UITapGestureRecognizer(target: self, action: "forFrameViewTapped")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(SharePlugSettingsViewController.forFrameViewTapped))
         self.viewForFrame.addGestureRecognizer(tapGesture)
         self.findAddressButton.layer.cornerRadius = 7.5
         locationManager.delegate = self

@@ -63,7 +63,9 @@ class DetailedDescriptionForPointViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.sendRequestButton.isHidden = true
+        self.cancelRequestButton.isHidden = true
+        self.deleteCharge.isHidden = true
         self.identifierOfRequestSentFromDetailedView = ""
         
         
@@ -105,6 +107,7 @@ class DetailedDescriptionForPointViewController: UIViewController {
         if self.currentUser.bool(forKey: "requestWasSent")  {
             self.sendRequestButton.isHidden = true
             self.cancelRequestButton.isHidden = false
+            self.deleteCharge.isHidden = true
             
         }
         if self.currentUser.bool(forKey: "spotCreated") && self.currentUser.string(forKey: "plugIdSetWhenCreated")! != self.spotId {

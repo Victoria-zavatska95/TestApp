@@ -77,6 +77,7 @@ class ChargingTableViewCell: UITableViewCell {
     // send request for charging
     @IBAction func sendRequestAction(_ sender: Any) {
         if self.reachability.isReachable {
+               self.sendRequestButton.isEnabled = false
             PrivateSpotsRequest().postSendRequestForAplug(spotId: self.spotID) { (json, status, statusOfSharing) in
                 if status && !statusOfSharing {
                     self.identifier = self.spotID
@@ -84,10 +85,16 @@ class ChargingTableViewCell: UITableViewCell {
                     self.sendRequestButton.isHidden = true
                     self.cancelRequest.isHidden = false
                     self.variableTableView.tableView.reloadData()
-                    
+                   
+
+                  
                 }
                 if !status && !statusOfSharing {
-                    Alert().creatingAlert(message: "You should to complete the previous session", controller: self.variableTableView)
+                   
+                    self.cancelRequest.isHidden = true
+                    self.sendRequestButton.isHidden = true
+                    self.variableTableView.tableView.reloadData()
+ 
                 }
                 if !status && statusOfSharing {
                     Alert().creatingAlert(message: "You can't host yourself", controller: self.variableTableView)
@@ -95,7 +102,7 @@ class ChargingTableViewCell: UITableViewCell {
                     self.cancelRequest.isHidden = true
                 }
                 
-                
+             self.cancelRequest.isEnabled = true    
             }
         } else {
             Alert().creatingAlert(message: "No Internet Connection", controller: self.variableTableView)
@@ -134,10 +141,13 @@ class ChargingTableViewCell: UITableViewCell {
         }
         if self.currentUser.bool(forKey: "requestWasSent") {
             if self.reachability.isReachable {
+                self.cancelRequest.isEnabled = false
                 PrivateSpotsRequest().putCanceledPrivateHostRequestBeforeConfirmation { (json, status) in
                     if status {
                         self.identifier = self.spotID
                         self.cancelRequest.isHidden = true
+                        self.sendRequestButton.isHidden = false
+                          self.sendRequestButton.isEnabled = true
                         self.variableTableView.tableView.reloadData()
                         
                     }else{
