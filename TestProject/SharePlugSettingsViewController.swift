@@ -136,7 +136,7 @@ var userCoordinate2D = CLLocationCoordinate2D()
     }
     // end
     
-           
+    
     
     // set up the view for TapGestureRecognizer
     func forFrameViewTapped() {
